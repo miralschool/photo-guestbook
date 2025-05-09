@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from './components/ui/button'; // 상대경로로 수정
+import { Button } from '@/components/ui/button';
 
 export default function PhotoGuestbook() {
   const [entries, setEntries] = useState([]);
@@ -70,7 +70,7 @@ export default function PhotoGuestbook() {
 
   return (
     <div className="fixed inset-0 overflow-hidden bg-gradient-to-br from-blue-100 to-cyan-200">
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-50 bg-white bg-opacity-90 p-4 rounded-xl shadow-lg flex flex-col items-center gap-2">
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-50 bg-white bg-opacity-90 p-4 rounded-xl shadow-lg flex flex-col items-center gap-2">
         <img src="/한글로고(가로).png" alt="마크" className="w-32 h-auto mb-2" />
         <input
           type="text"
@@ -120,7 +120,11 @@ export default function PhotoGuestbook() {
               drag
               dragConstraints={{ top: 0, left: 0, right: window.innerWidth, bottom: window.innerHeight }}
               initial={{ x: startX, y: entry.y }}
-              style={{ width: `${imageWidth}px`, height: `${imageHeight}px` }}
+              style={{
+                width: `${imageWidth}px`,
+                height: `${imageHeight}px`,
+                
+              }}
               onClick={() => handleEnlarge(entry.id)}
             >
               <motion.div
@@ -133,23 +137,19 @@ export default function PhotoGuestbook() {
                   transition={{ duration: 0 }}
                   className="rounded-xl overflow-hidden shadow-xl border-4 border-white bg-white w-full h-full"
                 >
-                  {entry.image ? (
-                    <img
-                      src={entry.image}
-                      alt="guest"
-                      className="w-full h-full object-contain rounded-xl shadow-xl border-4 border-white bg-white"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex flex-col justify-center text-center p-4 text-gray-700 text-sm rounded-xl shadow-xl border-4 border-white bg-white">
-                      <div className="text-lg font-semibold">{entry.name}</div>
-                      <div className="text-sm">{entry.message}</div>
-                      <div className="text-xs text-gray-500 mt-1">{entry.date}</div>
-                    </div>
-                  )}
-                  <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-xs p-1 text-center">
-                    {entry.name} - {entry.message} ({entry.date})
-                  </div>
-                </motion.div>
+                {entry.image ? (
+                <img src={entry.image} alt="guest" className="w-full h-full object-contain rounded-xl shadow-xl border-4 border-white bg-white" />
+              ) : (
+                <div className="w-full h-full flex flex-col justify-center text-center p-4 text-gray-700 text-sm rounded-xl shadow-xl border-4 border-white bg-white">
+  <div className="text-lg font-semibold">{entry.name}</div>
+  <div className="text-sm">{entry.message}</div>
+  <div className="text-xs text-gray-500 mt-1">{entry.date}</div>
+</div>
+              )}
+              <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-xs p-1 text-center">
+                {entry.name} - {entry.message} ({entry.date})
+              </div>
+                            </motion.div>
               </motion.div>
             </motion.div>
           );

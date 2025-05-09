@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 
 export default function PhotoGuestbook() {
   const [entries, setEntries] = useState([]);
@@ -87,9 +86,10 @@ export default function PhotoGuestbook() {
           className="w-64 p-1 border rounded"
         />
         <div className="flex gap-2">
-          <Button onClick={() => fileInputRef.current.click()}>사진 업로드</Button>
-          <Button onClick={() => cameraInputRef.current.click()}>사진 찍기</Button>
-          <Button onClick={() => handleAddEntry({ target: { files: [] } })}>사진 없이 등록</Button>
+<button onClick={() => fileInputRef.current.click()} className="px-4 py-1 bg-blue-500 text-white rounded">사진 업로드</button>
+<button onClick={() => cameraInputRef.current.click()} className="px-4 py-1 bg-green-500 text-white rounded">사진 찍기</button>
+<button onClick={() => handleAddEntry({ target: { files: [] } })} className="px-4 py-1 bg-gray-500 text-white rounded">사진 없이 등록</button>
+
         </div>
         <input
           type="file"

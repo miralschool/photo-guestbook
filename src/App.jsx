@@ -7,8 +7,14 @@ export default function PhotoGuestbook() {
   const [enlargedId, setEnlargedId] = useState(null);
   const cameraInputRef = useRef(null);
 
-  const imageWidth = 200;
-  const imageHeight = 250;
+  const imageWidth = 132; // 3.5cm -> 132px
+  const imageHeight = 170; // 4.5cm -> 170px
+  const boxWidth = 150; // 4cm -> 150px
+  const boxHeight = 225; // 6cm -> 225px
+
+  // 밀알학교 마크 크기
+  const logoWidth = 189; // 5cm -> 189px
+  const logoHeight = 76; // 2cm -> 76px
 
   const randomVerticalPosition = () => {
     const maxY = window.innerHeight - imageHeight;
@@ -69,10 +75,11 @@ export default function PhotoGuestbook() {
   return (
     <div className="fixed inset-0 overflow-hidden bg-gradient-to-br from-blue-200 to-cyan-300 flex items-center justify-center">
       <div className="z-50 bg-white bg-opacity-90 p-6 rounded-xl shadow-lg flex flex-col items-center gap-4 w-80">
+        {/* 밀알학교 마크 크기 조정 */}
         <img
           src="/한글로고(가로).png"
           alt="마크"
-          className="w-24 h-auto mb-4"
+          className="w-[189px] h-[76px] mb-4" // 밀알학교 마크 크기 설정 (5cm x 2cm)
         />
         <input
           type="text"
@@ -139,8 +146,8 @@ export default function PhotoGuestbook() {
                 times: [0, 0.9, 1],
               }}
               style={{
-                width: `${imageWidth}px`,
-                height: `${imageHeight}px`,
+                width: `${boxWidth}px`,
+                height: `${boxHeight}px`,
               }}
               onClick={() => handleEnlarge(entry.id)}
             >
@@ -148,19 +155,17 @@ export default function PhotoGuestbook() {
                 className="w-full h-full p-4 bg-white rounded-lg shadow-lg border-2 border-gray-400"
                 style={{ position: 'relative' }}
               >
-                {entry.image ? (
-                  <img
-                    src={entry.image}
-                    alt="guest"
-                    className="w-full h-full object-contain rounded-lg shadow-xl"
-                  />
-                ) : (
-                  <div className="w-full h-full flex flex-col justify-center text-center text-gray-700 text-sm">
-                    <div className="text-lg font-semibold">{entry.name}</div>
-                    <div>{entry.message}</div>
-                    <div className="text-xs text-gray-500 mt-1">{entry.date}</div>
-                  </div>
-                )}
+                <img
+                  src={entry.image}
+                  alt="guest"
+                  className="w-full h-full object-contain rounded-lg shadow-xl"
+                  style={{ maxWidth: `${imageWidth}px`, maxHeight: `${imageHeight}px` }}
+                />
+                <div className="w-full h-full flex flex-col justify-center text-center text-gray-700 text-sm">
+                  <div className="text-lg font-semibold">{entry.name}</div>
+                  <div>{entry.message}</div>
+                  <div className="text-xs text-gray-500 mt-1">{entry.date}</div>
+                </div>
                 <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-xs p-1 text-center">
                   {entry.name} - {entry.message} ({entry.date})
                 </div>

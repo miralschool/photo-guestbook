@@ -8,8 +8,8 @@ export default function PhotoGuestbook() {
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
 
-  const imageWidth = 192;
-  const imageHeight = 256;
+  const imageWidth = 200;
+  const imageHeight = 250;
 
   const randomVerticalPosition = () => {
     const maxY = window.innerHeight - imageHeight;
@@ -34,7 +34,7 @@ export default function PhotoGuestbook() {
       y,
       direction,
       duration,
-      enlarged: false
+      enlarged: false,
     };
 
     if (!file) {
@@ -68,27 +68,42 @@ export default function PhotoGuestbook() {
   };
 
   return (
-    <div className="fixed inset-0 overflow-hidden bg-gradient-to-br from-blue-100 to-cyan-200">
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-50 bg-white bg-opacity-90 p-4 rounded-xl shadow-lg flex flex-col items-center gap-2">
-        <img src="/한글로고(가로).png" alt="마크" className="w-32 h-auto mb-2" />
+    <div className="fixed inset-0 overflow-hidden bg-gradient-to-br from-blue-200 to-cyan-300 flex items-center justify-center">
+      <div className="z-50 bg-white bg-opacity-90 p-6 rounded-xl shadow-lg flex flex-col items-center gap-4 w-80">
+        <img src="/한글로고(가로).png" alt="마크" className="w-28 h-auto mb-4" />
         <input
           type="text"
           placeholder="이름"
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
-          className="w-64 p-1 border rounded"
+          className="w-full p-2 mb-2 border rounded-lg"
         />
         <input
           type="text"
           placeholder="한마디"
           value={form.message}
           onChange={(e) => setForm({ ...form, message: e.target.value })}
-          className="w-64 p-1 border rounded"
+          className="w-full p-2 mb-4 border rounded-lg"
         />
-        <div className="flex gap-2">
-          <button onClick={() => fileInputRef.current.click()} className="px-4 py-1 bg-blue-500 text-white rounded">사진 업로드</button>
-          <button onClick={() => cameraInputRef.current.click()} className="px-4 py-1 bg-green-500 text-white rounded">사진 찍기</button>
-          <button onClick={() => handleAddEntry({ target: { files: [] } })} className="px-4 py-1 bg-gray-500 text-white rounded">사진 없이 등록</button>
+        <div className="flex gap-2 w-full">
+          <button
+            onClick={() => fileInputRef.current.click()}
+            className="w-1/3 p-2 bg-blue-500 text-white rounded-lg"
+          >
+            사진 업로드
+          </button>
+          <button
+            onClick={() => cameraInputRef.current.click()}
+            className="w-1/3 p-2 bg-green-500 text-white rounded-lg"
+          >
+            사진 찍기
+          </button>
+          <button
+            onClick={() => handleAddEntry({ target: { files: [] } })}
+            className="w-1/3 p-2 bg-gray-500 text-white rounded-lg"
+          >
+            사진 없이 등록
+          </button>
         </div>
         <input
           type="file"
@@ -100,7 +115,7 @@ export default function PhotoGuestbook() {
         <input
           type="file"
           accept="image/*"
-          capture="environment"
+          capture="user"  // 전면 카메라를 활성화
           ref={cameraInputRef}
           onChange={handleAddEntry}
           className="hidden"
@@ -109,15 +124,22 @@ export default function PhotoGuestbook() {
 
       <AnimatePresence>
         {entries.map((entry) => {
-          const startX = entry.direction === 'left' ? window.innerWidth + imageWidth : -imageWidth * 2;
-          const endX = entry.direction === 'left' ? -imageWidth * 10 : window.innerWidth + imageWidth;
+          const startX =
+            entry.direction === 'left' ? window.innerWidth + imageWidth : -imageWidth * 2;
+          const endX =
+            entry.direction === 'left' ? -imageWidth * 10 : window.innerWidth + imageWidth;
 
           return (
             <motion.div
               key={entry.id}
-              className="absolute cursor-move"
+              className="absolute cursor-pointer"
               drag
-              dragConstraints={{ top: 0, left: 0, right: window.innerWidth, bottom: window.innerHeight }}
+              dragConstraints={{
+                top: 0,
+                left: 0,
+                right: window.innerWidth,
+                bottom: window.innerHeight,
+              }}
               initial={{ x: startX, y: entry.y }}
               style={{
                 width: `${imageWidth}px`,
@@ -127,7 +149,12 @@ export default function PhotoGuestbook() {
             >
               <motion.div
                 animate={{ x: [startX, endX], opacity: [1, 1, 0] }}
-                transition={{ duration: entry.duration, ease: 'linear', repeat: Infinity, times: [0, 0.9, 1] }}
+                transition={{
+                  duration: entry.duration,
+                  ease: 'linear',
+                  repeat: Infinity,
+                  times: [0, 0.9, 1],
+                }}
                 className="w-full h-full"
               >
                 <motion.div
@@ -136,7 +163,11 @@ export default function PhotoGuestbook() {
                   className="rounded-xl overflow-hidden shadow-xl border-4 border-white bg-white w-full h-full"
                 >
                   {entry.image ? (
-                    <img src={entry.image} alt="guest" className="w-full h-full object-contain rounded-xl shadow-xl border-4 border-white bg-white" />
+                    <img
+                      src={entry.image}
+                      alt="guest"
+                      className="w-full h-full object-contain rounded-xl shadow-xl border-4 border-white bg-white"
+                    />
                   ) : (
                     <div className="w-full h-full flex flex-col justify-center text-center p-4 text-gray-700 text-sm rounded-xl shadow-xl border-4 border-white bg-white">
                       <div className="text-lg font-semibold">{entry.name}</div>

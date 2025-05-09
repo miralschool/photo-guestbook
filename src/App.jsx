@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '../components/ui/button'; // 상대경로로 수정
+import { Button } from './components/ui/button'; // 상대경로로 수정
 
 export default function PhotoGuestbook() {
   const [entries, setEntries] = useState([]);

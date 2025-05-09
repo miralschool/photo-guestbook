@@ -5,7 +5,6 @@ export default function PhotoGuestbook() {
   const [entries, setEntries] = useState([]);
   const [form, setForm] = useState({ name: '', message: '' });
   const [enlargedId, setEnlargedId] = useState(null);
-  const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
 
   const imageWidth = 200;
@@ -70,7 +69,11 @@ export default function PhotoGuestbook() {
   return (
     <div className="fixed inset-0 overflow-hidden bg-gradient-to-br from-blue-200 to-cyan-300 flex items-center justify-center">
       <div className="z-50 bg-white bg-opacity-90 p-6 rounded-xl shadow-lg flex flex-col items-center gap-4 w-80">
-        <img src="/한글로고(가로).png" alt="마크" className="w-28 h-auto mb-4" />
+        <img
+          src="/한글로고(가로).png"
+          alt="마크"
+          className="w-24 h-auto mb-4"
+        />
         <input
           type="text"
           placeholder="이름"
@@ -85,13 +88,7 @@ export default function PhotoGuestbook() {
           onChange={(e) => setForm({ ...form, message: e.target.value })}
           className="w-full p-2 mb-4 border rounded-lg"
         />
-        <div className="flex gap-2 w-full">
-          <button
-            onClick={() => fileInputRef.current.click()}
-            className="w-1/3 p-2 bg-blue-500 text-white rounded-lg"
-          >
-            사진 업로드
-          </button>
+        <div className="flex gap-4 w-full justify-center">
           <button
             onClick={() => cameraInputRef.current.click()}
             className="w-1/3 p-2 bg-green-500 text-white rounded-lg"
@@ -108,14 +105,7 @@ export default function PhotoGuestbook() {
         <input
           type="file"
           accept="image/*"
-          ref={fileInputRef}
-          onChange={handleAddEntry}
-          className="hidden"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          capture="user"  // 전면 카메라를 활성화
+          capture="user"
           ref={cameraInputRef}
           onChange={handleAddEntry}
           className="hidden"
@@ -141,45 +131,40 @@ export default function PhotoGuestbook() {
                 bottom: window.innerHeight,
               }}
               initial={{ x: startX, y: entry.y }}
+              animate={{ x: [startX, endX], opacity: [1, 1, 0] }}
+              transition={{
+                duration: entry.duration,
+                ease: 'linear',
+                repeat: Infinity,
+                times: [0, 0.9, 1],
+              }}
               style={{
                 width: `${imageWidth}px`,
                 height: `${imageHeight}px`,
               }}
               onClick={() => handleEnlarge(entry.id)}
             >
-              <motion.div
-                animate={{ x: [startX, endX], opacity: [1, 1, 0] }}
-                transition={{
-                  duration: entry.duration,
-                  ease: 'linear',
-                  repeat: Infinity,
-                  times: [0, 0.9, 1],
-                }}
-                className="w-full h-full"
+              <div
+                className="w-full h-full p-4 bg-white rounded-lg shadow-lg border-2 border-gray-400"
+                style={{ position: 'relative' }}
               >
-                <motion.div
-                  animate={{ scale: entry.enlarged ? 2 : 1, zIndex: entry.enlarged ? 50 : 10 }}
-                  transition={{ duration: 0 }}
-                  className="rounded-xl overflow-hidden shadow-xl border-4 border-white bg-white w-full h-full"
-                >
-                  {entry.image ? (
-                    <img
-                      src={entry.image}
-                      alt="guest"
-                      className="w-full h-full object-contain rounded-xl shadow-xl border-4 border-white bg-white"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex flex-col justify-center text-center p-4 text-gray-700 text-sm rounded-xl shadow-xl border-4 border-white bg-white">
-                      <div className="text-lg font-semibold">{entry.name}</div>
-                      <div className="text-sm">{entry.message}</div>
-                      <div className="text-xs text-gray-500 mt-1">{entry.date}</div>
-                    </div>
-                  )}
-                  <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-xs p-1 text-center">
-                    {entry.name} - {entry.message} ({entry.date})
+                {entry.image ? (
+                  <img
+                    src={entry.image}
+                    alt="guest"
+                    className="w-full h-full object-contain rounded-lg shadow-xl"
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col justify-center text-center text-gray-700 text-sm">
+                    <div className="text-lg font-semibold">{entry.name}</div>
+                    <div>{entry.message}</div>
+                    <div className="text-xs text-gray-500 mt-1">{entry.date}</div>
                   </div>
-                </motion.div>
-              </motion.div>
+                )}
+                <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-xs p-1 text-center">
+                  {entry.name} - {entry.message} ({entry.date})
+                </div>
+              </div>
             </motion.div>
           );
         })}
